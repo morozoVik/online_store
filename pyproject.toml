@@ -7,12 +7,59 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.13"
-pytest = "^8.4.1"
-pytest-cov = "^6.2.1"
+pandas = "^2.0.0"
+openpyxl = "^3.1.0"
+requests = "^2.31.0"
+python-dotenv = "^1.0.0"
 flake8 = "^7.3.0"
 mypy = "^1.17.0"
+black = "^25.1.0"
+isort = "^6.0.1"
+pytest = "^8.4.1"
+pytest-cov = "^6.2.1"
 
+[tool.poetry.group.dev.dependencies]
+pytest-mock = "^3.11.1"
+types-requests = "^2.31.0"
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=2.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 119
+exclude = '''
+/(
+    \.git
+    | \.venv
+)/
+'''
+
+[tool.isort]
+line_length = 119
+profile = "black"
+known_first_party = ["src"]
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+exclude = '''
+^(
+    venv/
+    | \.venv/
+)/
+'''
+
+[tool.flake8]
+max-line-length = 119
+exclude = ".git,__pycache__,venv,.venv"
+ignore = "E203,W503"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+addopts = "-v --cov=src --cov-report=term-missing --cov-fail-under=80"

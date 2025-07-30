@@ -1,6 +1,7 @@
 import pytest
 
-from src.models import Category, Product
+from src.category import Category
+from src.product import Product
 
 
 @pytest.fixture
@@ -23,8 +24,8 @@ def test_product_initialization(sample_product: Product) -> None:
 def test_category_initialization(sample_category: Category, sample_product: Product) -> None:
     assert sample_category.name == "Test Category"
     assert sample_category.description == "Test Description"
-    assert len(sample_category.products) == 1
-    assert sample_category.products[0] == sample_product
+    assert "Test Product" in sample_category.products
+    assert "100.0 руб." in sample_category.products
 
 
 def test_category_count() -> None:

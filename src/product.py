@@ -5,7 +5,7 @@ class Product:
         """Инициализирует экземпляр класса Product."""
         self.name = name
         self.description = description
-        self._price = price
+        self.__price = price
         self.quantity = quantity
 
     @classmethod
@@ -21,7 +21,7 @@ class Product:
     @property
     def price(self) -> float:
         """Геттер для получения цены продукта."""
-        return self._price
+        return self.__price
 
     @price.setter
     def price(self, new_price: float) -> None:
@@ -29,7 +29,7 @@ class Product:
         if new_price <= 0:
             print("Цена не должна быть нулевая или отрицательная")
         else:
-            self._price = new_price
+            self.__price = new_price
 
     def __str__(self) -> str:
         """Возвращает строковое представление продукта."""

@@ -1,3 +1,6 @@
+import pytest
+
+from src.category import Category
 from src.product import Product
 
 
@@ -26,3 +29,23 @@ def test_new_product_classmethod() -> None:
     product = Product.new_product(product_data)
     assert isinstance(product, Product)
     assert product.name == "Ноутбук"
+
+
+def test_product_addition() -> None:
+    """Тест сложения продуктов."""
+    product1 = Product("Телефон", "Смартфон", 100.0, 10)
+    product2 = Product("Ноутбук", "Игровой", 200.0, 2)
+    assert product1 + product2 == 1400.0
+
+
+def test_product_addition_with_invalid_type() -> None:
+    """Тест сложения продукта с объектом другого типа."""
+    product = Product("Телефон", "Смартфон", 100.0, 10)
+    with pytest.raises(TypeError):
+        product + 100  # type: ignore
+
+
+def test_add_product_invalid_type() -> None:
+    category = Category("Тест", "Тест", [])
+    with pytest.raises(TypeError):
+        category.add_product("не продукт")  # type: ignore

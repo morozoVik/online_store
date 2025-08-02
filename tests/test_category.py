@@ -25,4 +25,11 @@ def test_category_str() -> None:
     """Тестирование строкового представления категории."""
     product = Product("Тест", "Описание", 100.0, 10)
     category = Category("Тест", "Описание", [product])
-    assert str(category) == "Тест, количество продуктов: 1 шт."
+    assert str(category) == "Тест, количество продуктов: 10 шт."
+
+
+def test_category_str_total_quantity() -> None:
+    product1 = Product("Товар 1", "Описание", 100.0, 5)
+    product2 = Product("Товар 2", "Описание", 200.0, 3)
+    category = Category("Категория", "Описание", [product1, product2])
+    assert str(category) == "Категория, количество продуктов: 8 шт."

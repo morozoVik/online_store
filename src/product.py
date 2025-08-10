@@ -1,5 +1,5 @@
 class Product:
-    """Класс для представления товара в магазине."""
+    """Базовый класс для представления товара в магазине."""
 
     def __init__(self, name: str, description: str, price: float, quantity: int) -> None:
         """Инициализирует экземпляр класса Product."""
@@ -20,12 +20,12 @@ class Product:
 
     @property
     def price(self) -> float:
-        """Геттер для получения цены продукта."""
+        """Возвращает цену продукта."""
         return self.__price
 
     @price.setter
     def price(self, new_price: float) -> None:
-        """Сеттер для установки новой цены продукта с проверкой."""
+        """Устанавливает новую цену продукта с проверкой."""
         if new_price <= 0:
             print("Цена не должна быть нулевая или отрицательная")
         else:
@@ -37,6 +37,48 @@ class Product:
 
     def __add__(self, other: "Product") -> float:
         """Складывает продукты по формуле: цена * количество для каждого продукта."""
-        if not isinstance(other, Product):
-            raise TypeError("Можно складывать только объекты класса Product")
+        if not isinstance(other, self.__class__):
+            raise TypeError("Можно складывать только товары одного класса")
         return self.price * self.quantity + other.price * other.quantity
+
+
+class Smartphone(Product):
+    """Класс для представления смартфонов в магазине."""
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        efficiency: float,
+        model: str,
+        memory: int,
+        color: str,
+    ) -> None:
+        """Инициализирует экземпляр класса Smartphone."""
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+
+class LawnGrass(Product):
+    """Класс для представления газонной травы в магазине."""
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        country: str,
+        germination_period: int,
+        color: str,
+    ) -> None:
+        """Инициализирует экземпляр класса LawnGrass."""
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color

@@ -1,7 +1,9 @@
+from abc import ABC
+
 import pytest
 
 from src.category import Category
-from src.product import LawnGrass, Product, Smartphone
+from src.product import BaseProduct, LawnGrass, Product, Smartphone
 
 
 def test_product_creation() -> None:
@@ -105,8 +107,33 @@ def test_add_same_products() -> None:
     assert smartphone1 + smartphone2 == 800
 
 
-def test_add_invalid_type_to_category():
+def test_add_invalid_type_to_category() -> None:
     """Тест добавления неверного типа в категорию."""
     category = Category("Test", "Test", [])
     with pytest.raises(TypeError):
-        category.add_product("не продукт")
+        category.add_product("не продукт")  # type: ignore[arg-type]
+
+
+def test_product_inherits_from_base_product() -> None:
+    """Тест, что Product наследуется от BaseProduct."""
+    assert issubclass(Product, BaseProduct)
+
+
+def test_logging_mixin_functionality(capsys: pytest.CaptureFixture[str]) -> None:
+    """Тест функциональности миксина логирования."""
+    _ = Product("Test", "Desc", 100.0, 5)
+    captured = capsys.readouterr()
+    assert "Создан объект класса Product с параметрами" in captured.out
+    assert "'name': 'Test'" in captured.out
+    assert "'price': 100.0" in captured.out
+
+
+def test_base_product_is_abstract() -> None:
+    """Тест, что BaseProduct является абстрактным классом."""
+    assert issubclass(BaseProduct, ABC)
+
+
+def test_product_inheritance() -> None:
+    assert issubclass(Product, BaseProduct)
+    assert issubclass(Smartphone, Product)
+    assert issubclass(LawnGrass, Product)

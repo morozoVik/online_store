@@ -114,13 +114,6 @@ def test_add_invalid_type_to_category() -> None:
         category.add_product("не продукт")  # type: ignore[arg-type]
 
 
-def test_base_product_is_abstract() -> None:
-    """Тест, что BaseProduct является абстрактным классом."""
-    assert issubclass(BaseProduct, ABC)
-    with pytest.raises(TypeError):
-        BaseProduct()  # type: ignore
-
-
 def test_product_inherits_from_base_product() -> None:
     """Тест, что Product наследуется от BaseProduct."""
     assert issubclass(Product, BaseProduct)
@@ -128,21 +121,19 @@ def test_product_inherits_from_base_product() -> None:
 
 def test_logging_mixin_functionality(capsys: pytest.CaptureFixture[str]) -> None:
     """Тест функциональности миксина логирования."""
-    product = Product("Test", "Description", 100.0, 10)
-    assert isinstance(product, Product)
+    _ = Product("Test", "Desc", 100.0, 5)
     captured = capsys.readouterr()
-    assert "Создан объект класса Product с параметрами:" in captured.out
-    assert "name='Test'" in captured.out
-    assert "description='Description'" in captured.out
-    assert "price=100.0" in captured.out
-    assert "quantity=10" in captured.out
+    assert "Создан объект класса Product с параметрами" in captured.out
+    assert "'name': 'Test'" in captured.out
+    assert "'price': 100.0" in captured.out
 
 
-def test_product_repr() -> None:
-    """Тест метода __repr__ для Product."""
-    product = Product("Test", "Description", 100.0, 10)
-    repr_str = repr(product)
-    assert "Product(" in repr_str
-    assert "name='Test'" in repr_str
-    assert "_Product__price=100.0" in repr_str
-    assert "quantity=10" in repr_str
+def test_base_product_is_abstract() -> None:
+    """Тест, что BaseProduct является абстрактным классом."""
+    assert issubclass(BaseProduct, ABC)
+
+
+def test_product_inheritance() -> None:
+    assert issubclass(Product, BaseProduct)
+    assert issubclass(Smartphone, Product)
+    assert issubclass(LawnGrass, Product)

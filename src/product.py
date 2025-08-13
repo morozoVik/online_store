@@ -6,60 +6,51 @@ class BaseProduct(ABC):
     """Абстрактный базовый класс для всех продуктов."""
 
     @abstractmethod
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Абстрактный метод инициализации продукта."""
+    def __init__(self, name: str, description: str, price: float, quantity: int) -> None:
         pass
 
     @abstractmethod
     def __str__(self) -> str:
-        """Абстрактный метод строкового представления продукта."""
         pass
 
     @abstractmethod
     def __add__(self, other: Any) -> Any:
-        """Абстрактный метод сложения продуктов."""
         pass
 
     @property
     @abstractmethod
     def price(self) -> float:
-        """Абстрактный геттер для цены продукта."""
         pass
 
     @price.setter
     @abstractmethod
     def price(self, value: float) -> None:
-        """Абстрактный сеттер для цены продукта."""
         pass
 
 
-class LoggingMixin:
+class ProductLogger:
     """Миксин для логирования создания объектов."""
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Инициализирует миксин и логирует создание объекта."""
-        super().__init__(*args, **kwargs)
-        class_name = self.__class__.__name__
-        params = ", ".join([f"{k}={v!r}" for k, v in kwargs.items()])
-        print(f"Создан объект класса {class_name} с параметрами: {params}")
-
-    def __repr__(self) -> str:
-        """Возвращает строковое представление объекта для отладки."""
-        class_name = self.__class__.__name__
-        params = ", ".join([f"{k}={v!r}" for k, v in self.__dict__.items()])
-        return f"{class_name}({params})"
+    def __post_init__(self) -> None:
+        """Логирует создание объекта."""
+        params = {
+            "name": getattr(self, "name", "unknown"),
+            "description": getattr(self, "description", "unknown"),
+            "price": getattr(self, "price", 0.0),
+            "quantity": getattr(self, "quantity", 0),
+        }
+        print(f"Создан объект класса {self.__class__.__name__} с параметрами: {params}")
 
 
-class Product(LoggingMixin, BaseProduct):
+class Product(ProductLogger, BaseProduct):
     """Базовый класс для представления товара в магазине."""
 
     def __init__(self, name: str, description: str, price: float, quantity: int) -> None:
-        """Инициализирует экземпляр класса Product."""
         self.name = name
         self.description = description
         self.__price = price
         self.quantity = quantity
-        super().__init__(name=name, description=description, price=price, quantity=quantity)
+        self.__post_init__()
 
     @classmethod
     def new_product(cls, product_data: dict) -> "Product":

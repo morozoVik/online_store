@@ -37,7 +37,7 @@ class Product:
 
     def __add__(self, other: "Product") -> float:
         """Складывает продукты по формуле: цена * количество для каждого продукта."""
-        if not isinstance(other, self.__class__):
+        if type(self) is not type(other):
             raise TypeError("Можно складывать только товары одного класса")
         return self.price * self.quantity + other.price * other.quantity
 

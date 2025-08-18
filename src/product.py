@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Dict
 
 
 class BaseProduct(ABC):
@@ -27,6 +27,12 @@ class BaseProduct(ABC):
     def price(self, value: float) -> None:
         pass
 
+    @classmethod
+    @abstractmethod
+    def new_product(cls, product_data: Dict[str, Any]) -> "BaseProduct":
+        """Создает новый продукт из словаря с данными."""
+        pass
+
 
 class ProductLogger:
     """Миксин для логирования создания объектов."""
@@ -46,6 +52,12 @@ class Product(ProductLogger, BaseProduct):
     """Базовый класс для представления товара в магазине."""
 
     def __init__(self, name: str, description: str, price: float, quantity: int) -> None:
+        """
+        Инициализирует экземпляр класса Product.
+        """
+        if quantity == 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
+
         self.name = name
         self.description = description
         self.__price = price
@@ -53,14 +65,9 @@ class Product(ProductLogger, BaseProduct):
         self.__post_init__()
 
     @classmethod
-    def new_product(cls, product_data: dict) -> "Product":
+    def new_product(cls, product_data: Dict[str, Any]) -> "Product":
         """Создает новый продукт из словаря с данными."""
-        return cls(
-            name=product_data["name"],
-            description=product_data["description"],
-            price=product_data["price"],
-            quantity=product_data["quantity"],
-        )
+        return cls(**product_data)
 
     @property
     def price(self) -> float:

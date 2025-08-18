@@ -1,3 +1,5 @@
+import pytest
+
 from src.category import Category
 from src.product import Product
 
@@ -33,3 +35,24 @@ def test_category_str_total_quantity() -> None:
     product2 = Product("Товар 2", "Описание", 200.0, 3)
     category = Category("Категория", "Описание", [product1, product2])
     assert str(category) == "Категория, количество продуктов: 8 шт."
+
+
+def test_product_zero_quantity_raises_error() -> None:
+    """Тест, что создание продукта с нулевым количеством вызывает ошибку."""
+    with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен"):
+        Product("Телефон", "Смартфон", 50000.0, 0)
+
+
+def test_category_average_price() -> None:
+    """Тест расчета средней цены товаров в категории."""
+    product1 = Product("Товар 1", "Описание", 100.0, 5)
+    product2 = Product("Товар 2", "Описание", 200.0, 3)
+    category = Category("Категория", "Описание", [product1, product2])
+
+    assert category.average_price() == 150.0
+
+
+def test_category_average_price_empty() -> None:
+    """Тест расчета средней цены для пустой категории."""
+    category = Category("Пустая категория", "Описание", [])
+    assert category.average_price() == 0.0
